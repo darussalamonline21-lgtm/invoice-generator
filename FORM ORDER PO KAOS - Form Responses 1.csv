@@ -1,0 +1,6 @@
+Timestamp,ORDER-ID,Nama Lengkap,No HP,Alamat Pengiriman,Ukuran Kaos (size),Jumlah (QTY),Metode Pembayaran,STATUS PEMBAYARAN
+2026-01-20 10:00:00,ORD-001,Budi Santoso,081234567890,Jl. Merdeka No. 123 RT 01 RW 02 Kelurahan Sukamaju Kecamatan Cilandak Jakarta Selatan 12345,L,2,Transfer Full,LUNAS
+2026-01-20 11:30:00,ORD-002,Siti Rahayu,085678901234,Jl. Pahlawan No. 45 Surabaya,M,1,DP 50%,DP 50% DIBAYAR
+2026-01-20 14:00:00,ORD-003,Ahmad Firmansyah,087890123456,Komplek Griya Indah Blok A No. 10 Bandung Jawa Barat,XL,3,Transfer Full,BELUM BAYAR
+2026-01-20 15:45:00,ORD-004,Dewi Lestari,089012345678,Perumahan Green Valley Blok C-15 Tangerang,S,1,DP 50%,DP 50% DIBAYAR
+2026-01-20 16:30:00,ORD-005,Rizky Pratama,082345678901,Jl. Gatot Subroto No. 88 Semarang Jawa Tengah,L,5,Transfer Full,LUNAS
