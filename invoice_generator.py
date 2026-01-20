@@ -167,6 +167,9 @@ def create_invoice_pdf(row, row_index, output_path, logo_path=None, config=None)
     
     # Phone/HP (jika ada)
     phone = get_column_value(row, ['No HP', 'No. HP', 'Phone', 'Telepon', 'NO HP', 'Nomor HP'])
+    # Fix phone number: add leading 0 if it starts with 8 (Indonesian format)
+    if phone != '-' and phone.isdigit() and phone.startswith('8'):
+        phone = '0' + phone
     
     # ==== KALKULASI HARGA ====
     total_harga = cfg_harga * qty
