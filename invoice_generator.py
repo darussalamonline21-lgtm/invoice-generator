@@ -117,8 +117,33 @@ def get_column_value(row, possible_names, default='-'):
 # PDF GENERATION
 # ==============================================================================
 
-def create_invoice_pdf(row, row_index, output_path, logo_path=None):
-    """Generate PDF invoice untuk satu order"""
+def create_invoice_pdf(row, row_index, output_path, logo_path=None, config=None):
+    """Generate PDF invoice untuk satu order
+    
+    Args:
+        row: DataFrame row containing order data
+        row_index: Index of the row
+        output_path: Path to save the PDF
+        logo_path: Optional path to logo image
+        config: Optional dict with keys:
+            - harga_satuan
+            - company_name, company_tagline, company_address, company_phone, company_email
+            - bank_name, bank_account, bank_holder
+    """
+    
+    # Use config values or defaults
+    if config is None:
+        config = {}
+    
+    cfg_harga = config.get('harga_satuan', HARGA_SATUAN)
+    cfg_company_name = config.get('company_name', COMPANY_NAME)
+    cfg_company_tagline = config.get('company_tagline', COMPANY_TAGLINE)
+    cfg_company_address = config.get('company_address', COMPANY_ADDRESS)
+    cfg_company_phone = config.get('company_phone', COMPANY_PHONE)
+    cfg_company_email = config.get('company_email', COMPANY_EMAIL)
+    cfg_bank_name = config.get('bank_name', BANK_NAME)
+    cfg_bank_account = config.get('bank_account', BANK_ACCOUNT)
+    cfg_bank_holder = config.get('bank_holder', BANK_HOLDER)
     
     # Extract data dengan handling berbagai nama kolom
     order_id = get_column_value(row, ['ORDER-ID', 'Order ID', 'ORDER ID', 'order-id', 'OrderID'])
@@ -144,7 +169,7 @@ def create_invoice_pdf(row, row_index, output_path, logo_path=None):
     phone = get_column_value(row, ['No HP', 'No. HP', 'Phone', 'Telepon', 'NO HP', 'Nomor HP'])
     
     # ==== KALKULASI HARGA ====
-    total_harga = HARGA_SATUAN * qty
+    total_harga = cfg_harga * qty
     
     # Cek apakah DP 50%
     is_dp = 'dp' in metode_bayar.lower() or '50%' in metode_bayar.lower()
@@ -224,15 +249,15 @@ def create_invoice_pdf(row, row_index, output_path, logo_path=None):
         logo_cell = logo
     else:
         # Placeholder jika tidak ada logo
-        logo_cell = Paragraph(f"<font size='18' color='#{PRIMARY_COLOR.hexval()[2:]}'><b>{COMPANY_NAME[:2]}</b></font>", styles['Normal'])
+        logo_cell = Paragraph(f"<font size='18' color='#{PRIMARY_COLOR.hexval()[2:]}'><b>{cfg_company_name[:2]}</b></font>", styles['Normal'])
     
     # Right side: Company info
     company_info = f"""
-    <font size='16' color='#{PRIMARY_COLOR.hexval()[2:]}'><b>{COMPANY_NAME}</b></font><br/>
-    <font size='8' color='gray'>{COMPANY_TAGLINE}</font><br/><br/>
-    <font size='9'>{COMPANY_ADDRESS}</font><br/>
-    <font size='9'>📞 {COMPANY_PHONE}</font><br/>
-    <font size='9'>✉ {COMPANY_EMAIL}</font>
+    <font size='16' color='#{PRIMARY_COLOR.hexval()[2:]}'><b>{cfg_company_name}</b></font><br/>
+    <font size='8' color='gray'>{cfg_company_tagline}</font><br/><br/>
+    <font size='9'>{cfg_company_address}</font><br/>
+    <font size='9'>📞 {cfg_company_phone}</font><br/>
+    <font size='9'>✉ {cfg_company_email}</font>
     """
     
     header_table = Table(
@@ -387,9 +412,9 @@ def create_invoice_pdf(row, row_index, output_path, logo_path=None):
     if sisa_tagihan > 0:
         bank_info = f"""
         <font size='10'><b>Transfer ke:</b></font><br/>
-        <font size='10'>Bank: {BANK_NAME}</font><br/>
-        <font size='10'>No. Rekening: {BANK_ACCOUNT}</font><br/>
-        <font size='10'>Atas Nama: {BANK_HOLDER}</font>
+        <font size='10'>Bank: {cfg_bank_name}</font><br/>
+        <font size='10'>No. Rekening: {cfg_bank_account}</font><br/>
+        <font size='10'>Atas Nama: {cfg_bank_holder}</font>
         """
         
         bank_table = Table([[Paragraph(bank_info, styles['Normal'])]], colWidths=[17*cm])

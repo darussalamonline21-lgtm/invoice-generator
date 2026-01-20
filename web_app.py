@@ -314,8 +314,21 @@ if uploaded_file is not None:
                             filename = f"Invoice_{safe_order_id}_{safe_nama}.pdf"
                             output_path = os.path.join(temp_dir, filename)
                             
-                            # Generate PDF
-                            create_invoice_pdf(row, idx, output_path, None)
+                            # Build config dict with current sidebar values
+                            pdf_config = {
+                                'harga_satuan': harga_satuan,
+                                'company_name': company_name,
+                                'company_tagline': company_tagline,
+                                'company_address': company_address,
+                                'company_phone': company_phone,
+                                'company_email': company_email,
+                                'bank_name': bank_name,
+                                'bank_account': bank_account,
+                                'bank_holder': bank_holder
+                            }
+                            
+                            # Generate PDF with config
+                            create_invoice_pdf(row, idx, output_path, None, config=pdf_config)
                             generated_files.append((filename, output_path))
                             
                             status_text.text(f"Generating: {filename}")
